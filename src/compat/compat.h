@@ -464,6 +464,7 @@ static inline __be32 our_inet_confirm_addr(struct net *net, struct in_device *in
 #include <linux/slab.h>
 static inline void *kvmalloc_ours(size_t size, gfp_t flags)
 {
+#ifndef CONFIG_CAVIUM_OCTEON_IPFWD_OFFLOAD
 	gfp_t kmalloc_flags = flags;
 	void *ret;
 	if (size > PAGE_SIZE) {
@@ -474,6 +475,7 @@ static inline void *kvmalloc_ours(size_t size, gfp_t flags)
 	ret = kmalloc(size, kmalloc_flags);
 	if (ret || size <= PAGE_SIZE)
 		return ret;
+#endif
 	return __vmalloc(size, flags, PAGE_KERNEL);
 }
 static inline void *kvzalloc_ours(size_t size, gfp_t flags)
